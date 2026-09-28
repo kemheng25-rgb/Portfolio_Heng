@@ -1,0 +1,9 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+# `migrate deploy` is idempotent — safe to run on every start. Keeps the
+# Postgres schema in sync without a separate release step.
+startCommand = "npx prisma migrate deploy && npm run start"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
