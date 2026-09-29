@@ -86,6 +86,27 @@ export function ArchitectureDiagramView({ diagram }: { diagram: ArchitectureDiag
           })}
         </g>
 
+        {diagram.edges.map((edge, index) => {
+          const from = positions.get(edge.from);
+          const to = positions.get(edge.to);
+          if (!from || !to) return null;
+          return (
+            <circle
+              key={`packet-${edge.from}-${edge.to}`}
+              r={3.5}
+              className="data-packet"
+              fill="var(--accent-strong)"
+            >
+              <animateMotion
+                path={`M${from.x},${from.y} L${to.x},${to.y}`}
+                dur="2.4s"
+                begin={`${-(index * 0.5)}s`}
+                repeatCount="indefinite"
+              />
+            </circle>
+          );
+        })}
+
         {diagram.nodes.map((node) => {
           const pos = positions.get(node.id)!;
           return (
@@ -110,6 +131,26 @@ export function ArchitectureDiagramView({ diagram }: { diagram: ArchitectureDiag
                 {node.label}
               </text>
             </g>
+          );
+        })}
+
+        {diagram.edges.map((edge, index) => {
+          const to = positions.get(edge.to);
+          if (!to) return null;
+          return (
+            <rect
+              key={`flash-${edge.from}-${edge.to}`}
+              x={to.x - NODE_WIDTH / 2 - 3}
+              y={to.y - NODE_HEIGHT / 2 - 3}
+              width={NODE_WIDTH + 6}
+              height={NODE_HEIGHT + 6}
+              rx={12}
+              className="node-flash"
+              style={{ animationDelay: `${-(index * 0.5)}s` }}
+              fill="none"
+              stroke="var(--accent-strong)"
+              strokeWidth={2}
+            />
           );
         })}
       </svg>

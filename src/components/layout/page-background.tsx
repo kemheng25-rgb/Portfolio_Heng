@@ -19,6 +19,8 @@ export function PageBackground() {
         <div className="aurora-blob aurora-blob-c bottom-[-15%] left-1/4 size-[24rem] bg-accent" />
       </div>
       <ParticleField />
+      <div className="crt-scanlines" />
+      <div className="crt-scan-beam" />
     </div>
   );
 }

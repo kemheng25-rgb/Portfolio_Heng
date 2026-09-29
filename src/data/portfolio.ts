@@ -69,6 +69,7 @@ export const skillCategories: SkillCategory[] = [
   {
     category: "Frontend",
     skills: [
+      "React",
       "Next.js",
       "Blazor",
       "JavaScript",

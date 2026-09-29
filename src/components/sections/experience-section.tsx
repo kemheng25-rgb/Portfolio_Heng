@@ -1,6 +1,7 @@
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/sections/section-heading";
+import { TimelineConnector } from "@/components/sections/timeline-connector";
 import { experience } from "@/data/portfolio";
 
 export function ExperienceSection() {
@@ -22,12 +23,7 @@ export function ExperienceSection() {
                 aria-hidden="true"
                 className="absolute top-1.5 left-0 flex size-4 items-center justify-center rounded-full border-2 border-accent bg-background"
               />
-              {index !== experience.length - 1 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute top-6 left-[7px] bottom-[-3rem] w-px bg-border"
-                />
-              )}
+              {index !== experience.length - 1 && <TimelineConnector />}
 
               <Reveal delay={0.05}>
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">

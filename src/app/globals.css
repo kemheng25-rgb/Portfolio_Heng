@@ -83,6 +83,13 @@ section[id] {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* The above resets CSS animations only. The traveling "data packet" dots
+     in the diagrams use SVG's native <animateMotion> (SMIL), which isn't a
+     CSS animation and ignores that reset, so hide them outright instead. */
+  .data-packet {
+    display: none;
+  }
 }
 
 .bg-grid {
@@ -400,4 +407,118 @@ section[id] {
   flex-shrink: 0;
   background-color: var(--accent);
   animation: pixel-window-blink 2.4s steps(1) infinite;
+}
+
+/* An 8-bit "pushable" button: a hard, un-blurred shadow that the button
+   visually sinks into on press, instead of a soft modern hover. Steps()
+   easing keeps the press itself instant/blocky rather than smooth. */
+.pixel-press {
+  box-shadow: 3px 3px 0 0 var(--border);
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-timing-function: ease-out;
+  transition-duration: 150ms;
+}
+
+.pixel-press:hover {
+  box-shadow: 4px 4px 0 0 var(--accent);
+}
+
+.pixel-press:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 0 transparent;
+  transition-duration: 60ms;
+  transition-timing-function: steps(1);
+}
+
+/* A faint CRT-screen texture over the whole page background: a static
+   scanline pattern plus one soft accent beam sweeping down on a loop, for
+   a retro-screen read rather than another soft glow. color-mix keeps both
+   theme-aware without separate light/dark overrides. */
+.crt-scanlines {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--foreground) 5%, transparent) 0px,
+    color-mix(in srgb, var(--foreground) 5%, transparent) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.crt-scan-beam {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 140px;
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--accent) 12%, transparent),
+    transparent
+  );
+  animation: crt-sweep 9s linear infinite;
+}
+
+@keyframes crt-sweep {
+  0% {
+    transform: translateY(-140px);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* A brief "receive" flash on a diagram node's border, timed via the same
+   animation-delay value as its incoming packet's SMIL `begin` (see
+   hero-network.tsx / architecture-diagram.tsx) so it lights up exactly
+   when that packet arrives, then fades until the next one. */
+@keyframes node-flash {
+  0% {
+    opacity: 1;
+  }
+  18%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.node-flash {
+  animation: node-flash 2.4s ease-out infinite;
+}
+
+/* Workflow diagram: a step's number badge briefly "pops," then the arrow
+   after it lights up halfway to the next badge — the same forward-moving
+   rhythm as the packet/flash animations above, done as a pulse since
+   these are icon glyphs, not SVG paths. */
+@keyframes step-pulse {
+  0% {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  20%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.step-pulse {
+  animation: step-pulse 2.4s ease-out infinite;
+}
+
+@keyframes step-arrow-flow {
+  0% {
+    color: var(--accent-strong);
+    transform: translateX(3px);
+  }
+  30%,
+  100% {
+    color: var(--muted);
+    transform: translateX(0);
+  }
+}
+
+.step-arrow-flow {
+  animation: step-arrow-flow 2.4s ease-out infinite;
 }
