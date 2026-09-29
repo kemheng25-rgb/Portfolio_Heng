@@ -1,20 +1,20 @@
 import { Link as LinkIcon, Mail, MapPin, Phone } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
-import { ContactForm } from "@/components/contact/contact-form";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/sections/section-heading";
+import { buttonVariants } from "@/components/ui/button";
 import { contact, personal, social } from "@/data/portfolio";
 
 export function ContactSection() {
   return (
     <section id="contact" aria-label="Contact" className="py-20 sm:py-28">
-      <Container className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+      <Container className="max-w-2xl">
         <Reveal>
           <SectionHeading
             eyebrow="Contact"
             title="Let's talk about your next system"
-            description="Email is the best way to reach me. The form below goes straight to my inbox."
+            description="Email is the best way to reach me — I read every message."
           />
 
           <ul className="mt-8 space-y-4 text-sm">
@@ -46,12 +46,14 @@ export function ContactSection() {
               </a>
             </li>
           </ul>
-        </Reveal>
 
-        <Reveal delay={0.1}>
-          <div className="rounded-lg border border-border bg-background-elevated p-6 sm:p-8">
-            <ContactForm />
-          </div>
+          <a
+            href={`mailto:${contact.email}`}
+            className={buttonVariants({ size: "lg", className: "mt-8" })}
+          >
+            <Mail aria-hidden="true" />
+            Send me an email
+          </a>
         </Reveal>
       </Container>
     </section>
