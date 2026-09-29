@@ -51,12 +51,14 @@ export function HeroNetwork() {
           );
         })}
       </g>
-      {nodes.map((node) => (
+      {nodes.map((node, index) => (
         <g key={node.id} transform={`translate(${node.x}, ${node.y})`}>
           <circle
             r={30}
+            className="node-pulse"
+            style={{ animationDelay: `${(index % 3) * 0.5}s` }}
             fill="var(--background-elevated)"
-            stroke="var(--border)"
+            stroke="var(--accent)"
             strokeWidth={1.5}
           />
           <text

@@ -31,7 +31,9 @@ export function ExperienceSection() {
 
               <Reveal delay={0.05}>
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                  <h3 className="text-xl font-semibold text-foreground">{entry.company}</h3>
+                  <h3 className="text-xl font-semibold tracking-tight text-foreground">
+                    {entry.company}
+                  </h3>
                   <span className="text-sm text-muted">
                     {entry.startDate} – {entry.endDate}
                   </span>
@@ -42,7 +44,7 @@ export function ExperienceSection() {
                 <div className="mt-6 space-y-6">
                   {entry.groups.map((group) => (
                     <div key={group.title}>
-                      <h4 className="text-sm font-semibold text-foreground">{group.title}</h4>
+                      <h4 className="text-base font-semibold text-foreground">{group.title}</h4>
                       <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-6 text-muted marker:text-accent">
                         {group.bullets.map((bullet) => (
                           <li key={bullet}>{bullet}</li>

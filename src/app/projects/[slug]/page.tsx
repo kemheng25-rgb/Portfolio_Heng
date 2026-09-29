@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/reveal";
 import { ArchitectureDiagramView } from "@/components/projects/architecture-diagram";
+import { CaseStudyMore } from "@/components/projects/case-study-more";
 import { WorkflowDiagram } from "@/components/projects/workflow-diagram";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { siteConfig } from "@/data/portfolio";
@@ -82,28 +83,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <span className="text-xs font-medium tracking-wide text-accent uppercase">
             {project.systemLabel}
           </span>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-[2.5rem]">
             {project.title}
           </h1>
-          <p className="mt-4 text-lg text-muted">{project.shortDescription}</p>
+          <p className="mt-4 text-lg leading-7 text-pretty text-muted">{project.shortDescription}</p>
         </Reveal>
 
         <div className="mt-12 space-y-12">
           <Reveal>
             <DetailBlock title="Project Overview">
               <p>{project.overview}</p>
-            </DetailBlock>
-          </Reveal>
-
-          <Reveal>
-            <DetailBlock title="Business Challenge">
-              <p>{project.businessChallenge}</p>
-            </DetailBlock>
-          </Reveal>
-
-          <Reveal>
-            <DetailBlock title="Users and Stakeholders">
-              <p>{project.usersAndStakeholders}</p>
             </DetailBlock>
           </Reveal>
 
@@ -130,36 +119,57 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </Reveal>
 
           <Reveal>
+            <DetailBlock title="Business Impact">
+              <p>{project.businessImpact}</p>
+            </DetailBlock>
+          </Reveal>
+
+          <Reveal>
+            <DetailBlock title="Technologies Used">
+              <ul className="flex flex-wrap gap-2">
+                {project.technologiesUsed.map((tech) => (
+                  <li
+                    key={tech}
+                    className="rounded-full border border-border px-3 py-1 text-sm text-foreground transition-all duration-200 hover:scale-105 hover:border-accent/60 hover:bg-accent/10 hover:text-accent"
+                  >
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            </DetailBlock>
+          </Reveal>
+        </div>
+
+        <div className="mt-12">
+          <CaseStudyMore>
+            <DetailBlock title="Business Challenge">
+              <p>{project.businessChallenge}</p>
+            </DetailBlock>
+
+            <DetailBlock title="Users and Stakeholders">
+              <p>{project.usersAndStakeholders}</p>
+            </DetailBlock>
+
             <DetailBlock title="Technical Approach">
               <p>{project.technicalApproach}</p>
             </DetailBlock>
-          </Reveal>
 
-          <Reveal>
             <DetailBlock title="Backend Implementation">
               <p>{project.backendImplementation}</p>
             </DetailBlock>
-          </Reveal>
 
-          <Reveal>
             <DetailBlock title="Frontend Implementation">
               <p>{project.frontendImplementation}</p>
             </DetailBlock>
-          </Reveal>
 
-          <Reveal>
             <DetailBlock title="Database Considerations">
               <p>{project.databaseConsiderations}</p>
             </DetailBlock>
-          </Reveal>
 
-          <Reveal>
             <DetailBlock title="Integration Considerations">
               <p>{project.integrationConsiderations}</p>
             </DetailBlock>
-          </Reveal>
 
-          <Reveal>
             <DetailBlock title="Important Engineering Decisions">
               <ul className="list-disc space-y-1.5 pl-5 marker:text-accent">
                 {project.engineeringDecisions.map((item) => (
@@ -167,9 +177,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 ))}
               </ul>
             </DetailBlock>
-          </Reveal>
 
-          <Reveal>
             <DetailBlock title="Challenges and Solutions">
               <div className="space-y-4">
                 {project.challengesAndSolutions.map((entry) => (
@@ -183,48 +191,23 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 ))}
               </div>
             </DetailBlock>
-          </Reveal>
 
-          <Reveal>
             <DetailBlock title="Security and Data Validation">
               <p>{project.securityAndValidation}</p>
             </DetailBlock>
-          </Reveal>
 
-          <Reveal>
-            <DetailBlock title="Business Impact">
-              <p>{project.businessImpact}</p>
-            </DetailBlock>
-          </Reveal>
-
-          <Reveal>
-            <DetailBlock title="Technologies Used">
-              <ul className="flex flex-wrap gap-2">
-                {project.technologiesUsed.map((tech) => (
-                  <li
-                    key={tech}
-                    className="rounded-full border border-border px-3 py-1 text-sm text-foreground"
-                  >
-                    {tech}
-                  </li>
-                ))}
-              </ul>
-            </DetailBlock>
-          </Reveal>
-
-          <Reveal>
             <DetailBlock title="Lessons Learned">
               <p>{project.lessonsLearned}</p>
             </DetailBlock>
-          </Reveal>
-
-          <Reveal>
-            <div className="rounded-lg border border-border bg-background-elevated p-4 text-sm text-muted">
-              {project.systemLabel}: built for an employer as part of professional work. No
-              source code, live demo, or confidential information is shown here.
-            </div>
-          </Reveal>
+          </CaseStudyMore>
         </div>
+
+        <Reveal>
+          <div className="mt-12 rounded-lg border border-border bg-background-elevated p-4 text-sm text-muted">
+            {project.systemLabel}: built for an employer as part of professional work. No source
+            code, live demo, or confidential information is shown here.
+          </div>
+        </Reveal>
       </Container>
     </article>
   );

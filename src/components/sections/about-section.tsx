@@ -37,7 +37,7 @@ export function AboutSection() {
                 className="rounded-lg border border-border bg-background-elevated p-6"
               >
                 <dt className="text-sm text-muted">{stat.label}</dt>
-                <dd className="mt-2 text-2xl font-semibold text-accent">{stat.value}</dd>
+                <dd className="mt-2 text-3xl font-bold tracking-tight text-accent">{stat.value}</dd>
               </div>
             ))}
           </dl>

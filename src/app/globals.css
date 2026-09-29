@@ -9,6 +9,25 @@
   --accent: #38bdf8;
   --accent-strong: #22d3ee;
   --accent-foreground: #04121c;
+  --diagram-database: #a78bfa;
+  --diagram-external: #fb923c;
+  --grid-line: rgba(148, 163, 184, 0.08);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --background: #f8fafc;
+  --background-elevated: #ffffff;
+  --foreground: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+  --accent: #0369a1;
+  --accent-strong: #0e7490;
+  --accent-foreground: #ffffff;
+  --diagram-database: #7c3aed;
+  --diagram-external: #c2410c;
+  --grid-line: rgba(15, 23, 42, 0.06);
+  color-scheme: light;
 }
 
 @theme inline {
@@ -68,9 +87,130 @@ section[id] {
 
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 48px 48px;
+}
+
+@keyframes grid-pan {
+  to {
+    background-position:
+      48px 48px,
+      48px 48px;
+  }
+}
+
+.bg-grid-animated {
+  animation: grid-pan 40s linear infinite;
+}
+
+@keyframes aurora-drift-a {
+  0%,
+  100% {
+    transform: translate(-6%, -4%) scale(1);
+  }
+  50% {
+    transform: translate(6%, 4%) scale(1.1);
+  }
+}
+
+@keyframes aurora-drift-b {
+  0%,
+  100% {
+    transform: translate(5%, 5%) scale(1.02);
+  }
+  50% {
+    transform: translate(-7%, -3%) scale(0.95);
+  }
+}
+
+@keyframes aurora-drift-c {
+  0%,
+  100% {
+    transform: translate(-3%, 6%) scale(0.98);
+  }
+  50% {
+    transform: translate(4%, -6%) scale(1.05);
+  }
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(100px);
+  opacity: 0.15;
+  will-change: transform;
+}
+
+.aurora-blob-a {
+  animation: aurora-drift-a 36s ease-in-out infinite;
+}
+
+.aurora-blob-b {
+  animation: aurora-drift-b 42s ease-in-out infinite;
+}
+
+.aurora-blob-c {
+  animation: aurora-drift-c 48s ease-in-out infinite;
+}
+
+@keyframes particle-fall {
+  0% {
+    transform: translate(0, -10%) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(24px, 55%) rotate(160deg);
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-16px, 120%) rotate(320deg);
+    opacity: 0;
+  }
+}
+
+@keyframes particle-fall-alt {
+  0% {
+    transform: translate(0, -10%) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-20px, 55%) rotate(-150deg);
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(18px, 120%) rotate(-300deg);
+    opacity: 0;
+  }
+}
+
+.particle-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  animation: particle-fall linear infinite;
+}
+
+.particle-alt {
+  animation-name: particle-fall-alt;
 }
 
 @keyframes dash-flow {
@@ -82,4 +222,182 @@ section[id] {
 .data-flow-line {
   stroke-dasharray: 6 6;
   animation: dash-flow 6s linear infinite;
+}
+
+@keyframes node-pulse {
+  0%,
+  100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.4;
+  }
+}
+
+.node-pulse {
+  animation: node-pulse 3s ease-in-out infinite;
+}
+
+/* Theme toggle: swap icon by attribute selector, not React state, to avoid
+   a hydration mismatch (the attribute is set by an inline script before
+   hydration and may not match the server-rendered markup). Dark is the
+   default (no attribute), so the sun (switch-to-light) icon shows by
+   default and the moon (switch-to-dark) icon shows once light is chosen. */
+.theme-toggle-sun {
+  display: block;
+}
+
+.theme-toggle-moon {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-toggle-sun {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-toggle-moon {
+  display: block;
+}
+
+.header-scrolled {
+  box-shadow: 0 1px 0 0 var(--border), 0 8px 24px -16px rgba(15, 23, 42, 0.35);
+}
+
+/* A circuit-trace style line that runs the full height of the homepage
+   section stack, echoing the data-flow lines in the hero/architecture
+   diagrams. Two layered dash patterns (a fine dash + a brighter, wider
+   "solder point" every 200px) animate downward together to read as data
+   flowing through the page rather than a static rule. Large-screen only —
+   there isn't safe margin outside the content column below 2xl. */
+.circuit-trace {
+  width: 2px;
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      var(--accent) 0,
+      var(--accent) 6px,
+      transparent 6px,
+      transparent 18px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--accent-strong) 0,
+      var(--accent-strong) 3px,
+      transparent 3px,
+      transparent 200px
+    );
+  background-size:
+    100% 18px,
+    100% 200px;
+  background-position:
+    0 0,
+    0 0;
+  background-repeat: repeat-y;
+  opacity: 0.4;
+  filter: drop-shadow(0 0 4px var(--accent));
+  animation: circuit-flow 5s linear infinite;
+}
+
+@keyframes circuit-flow {
+  to {
+    background-position:
+      0 18px,
+      0 200px;
+  }
+}
+
+.pixel-skyline {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  border-bottom: 2px solid var(--border);
+}
+
+.pixel-building {
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: start;
+  gap: 4px;
+  padding: 6px;
+  background-color: var(--background-elevated);
+  border: 2px solid var(--border);
+  border-bottom: none;
+}
+
+.pixel-window {
+  aspect-ratio: 1;
+  background-color: var(--muted);
+  opacity: 0.4;
+  animation: pixel-window-blink 6s steps(1) infinite;
+}
+
+@keyframes pixel-window-blink {
+  0%,
+  40% {
+    background-color: var(--muted);
+    opacity: 0.4;
+  }
+  45%,
+  90% {
+    background-color: var(--accent);
+    opacity: 1;
+  }
+  95%,
+  100% {
+    background-color: var(--muted);
+    opacity: 0.4;
+  }
+}
+
+.pixel-window:nth-child(3n + 1) {
+  animation-delay: 0s;
+}
+
+.pixel-window:nth-child(3n + 2) {
+  animation-delay: -2s;
+}
+
+.pixel-window:nth-child(3n + 3) {
+  animation-delay: -4s;
+}
+
+.pixel-scan-divider {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding-block: 2rem;
+}
+
+.pixel-scan-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--border);
+  animation: pixel-scan 3.5s steps(1) infinite;
+}
+
+@keyframes pixel-scan {
+  0%,
+  4%,
+  100% {
+    background-color: var(--border);
+  }
+  2% {
+    background-color: var(--accent);
+  }
+}
+
+/* A small blinking "status LED" — reuses the skyline window's hard-step
+   blink so the Featured Projects cards pick up the same pixel-art motif
+   without needing their own layout. */
+.pixel-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  background-color: var(--accent);
+  animation: pixel-window-blink 2.4s steps(1) infinite;
 }

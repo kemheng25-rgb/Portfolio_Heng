@@ -19,7 +19,7 @@ export function EducationSection() {
                 key={entry.institution}
                 className="rounded-lg border border-border bg-background-elevated p-6"
               >
-                <p className="text-base font-semibold text-foreground">{entry.degree}</p>
+                <p className="text-lg font-semibold tracking-tight text-foreground">{entry.degree}</p>
                 <p className="mt-1 text-sm text-muted">{entry.institution}</p>
                 <p className="text-sm text-muted">{entry.location}</p>
                 {entry.graduationDate && (
@@ -38,7 +38,7 @@ export function EducationSection() {
                 key={language.name}
                 className="flex items-center justify-between rounded-lg border border-border bg-background-elevated px-6 py-4"
               >
-                <span className="text-base font-medium text-foreground">{language.name}</span>
+                <span className="text-lg font-medium text-foreground">{language.name}</span>
                 <span className="text-sm text-muted">{language.proficiency}</span>
               </li>
             ))}

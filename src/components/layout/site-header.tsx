@@ -1,11 +1,13 @@
 "use client";
 
 import { Download, Link as LinkIcon, Menu, X } from "lucide-react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 
 import { Container } from "@/components/layout/container";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { navLinks, personal, social } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
@@ -15,6 +17,14 @@ export function SiteHeader() {
   const isHome = pathname === "/";
   const [open, setOpen] = React.useState(false);
   const [activeHref, setActiveHref] = React.useState<string>("/#home");
+  const [scrolled, setScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   React.useEffect(() => {
     if (!isHome) return;
@@ -52,7 +62,13 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+    <MotionConfig reducedMotion="user">
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur transition-shadow duration-300 supports-[backdrop-filter]:bg-background/70",
+        scrolled && "header-scrolled",
+      )}
+    >
       <Container className="flex h-16 items-center justify-between">
         <Link
           href="/#home"
@@ -74,13 +90,20 @@ export function SiteHeader() {
                     href={link.href}
                     aria-current={isActive ? "true" : undefined}
                     className={cn(
-                      "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      "relative rounded-md px-3 py-2 text-sm font-medium transition-colors",
                       isActive
                         ? "text-accent"
                         : "text-muted hover:text-foreground",
                     )}
                   >
                     {link.label}
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-active-pill"
+                        className="absolute inset-x-1 -bottom-px h-0.5 rounded-full bg-accent"
+                        transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                      />
+                    )}
                   </Link>
                 </li>
               );
@@ -111,64 +134,75 @@ export function SiteHeader() {
           <Link href="/#contact" className={buttonVariants({ variant: "primary", size: "sm" })}>
             Contact Me
           </Link>
+          <ThemeToggle />
         </div>
 
-        <button
-          type="button"
-          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "md:hidden")}
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((value) => !value)}
-        >
-          {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-        </button>
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </button>
+        </div>
       </Container>
 
-      {open && (
-        <nav
-          id="mobile-nav"
-          aria-label="Primary"
-          className="border-t border-border bg-background md:hidden"
-        >
-          <ul className="flex flex-col gap-1 px-4 py-3">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-background-elevated"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-            <li className="flex items-center gap-2 pt-2">
-              <a
-                href={social.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className={buttonVariants({ variant: "secondary", size: "sm" })}
-              >
-                <LinkIcon aria-hidden="true" />
-                GitHub
-              </a>
-              {personal.resumeAvailable && (
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            id="mobile-nav"
+            aria-label="Primary"
+            className="overflow-hidden border-t border-border bg-background md:hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <ul className="flex flex-col gap-1 px-4 py-3">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-background-elevated"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li className="flex items-center gap-2 pt-2">
                 <a
-                  href={personal.resumePath}
-                  download
+                  href={social.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setOpen(false)}
                   className={buttonVariants({ variant: "secondary", size: "sm" })}
                 >
-                  <Download aria-hidden="true" />
-                  Résumé
+                  <LinkIcon aria-hidden="true" />
+                  GitHub
                 </a>
-              )}
-            </li>
-          </ul>
-        </nav>
-      )}
+                {personal.resumeAvailable && (
+                  <a
+                    href={personal.resumePath}
+                    download
+                    onClick={() => setOpen(false)}
+                    className={buttonVariants({ variant: "secondary", size: "sm" })}
+                  >
+                    <Download aria-hidden="true" />
+                    Résumé
+                  </a>
+                )}
+              </li>
+            </ul>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
+    </MotionConfig>
   );
 }

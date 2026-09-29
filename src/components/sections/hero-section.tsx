@@ -2,21 +2,14 @@ import { ArrowRight, Download, Mail } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
+import { PixelSkyline } from "@/components/layout/pixel-skyline";
 import { HeroNetwork } from "@/components/sections/hero-network";
 import { buttonVariants } from "@/components/ui/button";
 import { brand, personal } from "@/data/portfolio";
 
 export function HeroSection() {
   return (
-    <section
-      id="home"
-      aria-label="Introduction"
-      className="relative overflow-hidden border-b border-border bg-grid"
-    >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background"
-      />
+    <section id="home" aria-label="Introduction" className="relative">
       <Container className="relative grid gap-12 py-20 sm:py-28 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div>
           <p className="text-sm font-medium tracking-wide text-accent uppercase">
@@ -58,6 +51,7 @@ export function HeroSection() {
           <HeroNetwork />
         </div>
       </Container>
+      <PixelSkyline compact />
     </section>
   );
 }

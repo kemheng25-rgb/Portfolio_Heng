@@ -4,8 +4,8 @@ const typeColor: Record<DiagramNodeType, string> = {
   client: "var(--accent)",
   api: "var(--accent-strong)",
   service: "var(--accent)",
-  database: "#a78bfa",
-  external: "#fb923c",
+  database: "var(--diagram-database)",
+  external: "var(--diagram-external)",
 };
 
 const NODE_WIDTH = 168;

@@ -22,7 +22,7 @@ export function SkillsSection() {
                   {category.skills.map((skill) => (
                     <li
                       key={skill}
-                      className="rounded-full border border-border px-3 py-1 text-sm text-foreground"
+                      className="rounded-full border border-border px-3 py-1 text-sm text-foreground transition-all duration-200 hover:scale-105 hover:border-accent/60 hover:bg-accent/10 hover:text-accent"
                     >
                       {skill}
                     </li>

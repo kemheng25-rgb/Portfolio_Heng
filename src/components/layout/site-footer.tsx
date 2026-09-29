@@ -2,13 +2,15 @@ import { Globe, Link as LinkIcon, Mail } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
+import { PixelSkyline } from "@/components/layout/pixel-skyline";
 import { contact, navLinks, personal, social } from "@/data/portfolio";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border">
+    <footer>
+      <PixelSkyline />
       <Container className="flex flex-col gap-8 py-12 md:flex-row md:items-start md:justify-between">
         <div className="max-w-sm space-y-2">
           <p className="text-lg font-semibold text-foreground">{personal.displayName}</p>
